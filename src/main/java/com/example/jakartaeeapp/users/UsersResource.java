@@ -1,10 +1,12 @@
 package com.example.jakartaeeapp.users;
 
+import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,6 +15,26 @@ import java.util.Map;
 
 @Path("/users")
 public class UsersResource {
+
+    @Inject
+    @ConfigProperty(name = "SAMPLE_KEY")
+    private String sampleKey;
+
+    @Inject
+    @ConfigProperty(name = "APP_ENV", defaultValue = "production")
+    private String appEnv;
+
+    @GET
+    @Path("/test-config")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Map<String, String> config() {
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Test Config");
+        response.put("sampleKey", sampleKey);
+        response.put("appEnv", appEnv);
+        return response;
+    }
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Map<String, Object> users() {
