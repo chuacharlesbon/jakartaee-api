@@ -1,13 +1,15 @@
 package com.example.jakartaeeapp.users;
 
 import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.Part;
 import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.HttpHeaders;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.*;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -107,6 +109,50 @@ public class UsersResource {
         return Response.status(Response.Status.CREATED)  // 201
                 .entity(newUser)
                 .build();
+    }
+
+    @POST
+    @Path("/upload")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response uploadFile(
+            @FormParam("username") String username, // Text field
+            @FormParam("part") EntityPart filePart // File upload part
+    ) {
+        // return Response.ok("File uploaded").build();
+
+        // Access the username directly
+        System.out.println("User: " + username);
+
+        // 1. Get Part Information
+//        String name = filePart.getName(); // The name of the form field (e.g., 'file')
+//        String fileName = filePart.getFileName().orElse("unknown_file"); // The original filename
+//        MediaType mediaType = filePart.getMediaType(); // The content type of the part
+//
+//        System.out.println("Processing file part: " + name);
+//        System.out.println("Original file name: " + fileName);
+//        System.out.println("Media Type: " + mediaType);
+
+        return Response.ok("File uploaded").build();
+
+        // 2. Access and Save the File Content
+//        try (InputStream inputStream = filePart.getContent()) {
+//
+//            // --- Basic File Saving Example ---
+//            // NOTE: In a real application, you'd use a safer, configured path.
+//            // Ensure the directory exists and the application has write permissions.
+//            java.nio.file.Path targetPath = Paths.get("/tmp/", fileName);
+//            Files.copy(inputStream, targetPath);
+//
+//            System.out.println("File saved successfully to: " + targetPath.toAbsolutePath());
+//
+//            return Response.ok("File uploaded and saved: " + fileName).build();
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+//                    .entity("File upload failed: " + e.getMessage())
+//                    .build();
+//        }
     }
 
     @PUT
